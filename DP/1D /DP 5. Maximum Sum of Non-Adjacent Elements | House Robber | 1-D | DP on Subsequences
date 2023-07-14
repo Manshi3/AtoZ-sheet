@@ -1,0 +1,50 @@
+Problem Statement:
+
+Given an array of ‘N’  positive integers, we need to return the maximum sum of the subsequence such that no two elements of the subsequence are adjacent elements in the array.
+
+Note: A subsequence of an array is a list with elements of the array where some elements are deleted ( or not deleted at all) and the elements should be in the same order in the 
+subsequence as in the array.
+
+The ques is asking me to print max subsequence. ? let's try all subsequences. whichever gives max sum, return - recursion. 
+adj - pick not pick 
+
+recursion - 
+#include <bits/stdc++.h> 
+int f(int ind, vector<int> &nums) {
+    if(ind == 0) return nums[ind];
+    if(ind < 0) return 0;
+    int pick = nums[ind] + f(ind - 2, nums);
+    int notpick = 0 + f(ind - 1, nums);
+    return max(pick, notpick);    
+}
+
+int maximumNonAdjacentSum(vector<int> &nums){
+    int n = nums.size();
+    return f(n-1, nums);
+}
+
+tc - O(2^n)
+sc - O(n)
+
+memoization
+#include <bits/stdc++.h> 
+int f(int ind, vector<int> &nums, vector<int> &dp) {
+    if(ind == 0) return nums[ind];
+    if(ind < 0) return 0;
+
+    if(dp[ind] != -1) return dp[ind];
+    
+    int pick = nums[ind] + f(ind - 2, nums, dp);
+    int notpick = 0 + f(ind - 1, nums, dp);
+    
+    return dp[ind] = max(pick, notpick);    
+}
+int maximumNonAdjacentSum(vector<int> &nums){
+    int n = nums.size();
+    vector<int> dp(n, -1);
+    return f(n-1, nums, dp);
+}
+
+tc - O(n)
+sc - O(n)+O(n)
+auxilary stack space - O(n) + recursion stack space - O(n)
