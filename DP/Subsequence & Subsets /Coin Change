@@ -1,0 +1,50 @@
+You are given an integer array coins representing coins of different denominations and an integer amount representing a total amount of money.
+
+Return the fewest number of coins that you need to make up that amount. If that amount of money cannot be made up by any combination of the coins, return -1.
+
+You may assume that you have an infinite number of each kind of coin.
+
+Example 1:
+
+Input: coins = [1,2,5], amount = 11
+Output: 3
+Explanation: 11 = 5 + 5 + 1
+Example 2:
+
+Input: coins = [2], amount = 3
+Output: -1
+Example 3:
+
+Input: coins = [1], amount = 0
+Output: 0
+
+HERE,THE ONLY CATCH HERE IS, AFTER TAKING THE ELEMENT, WE DO NOT GDECREAMENT, WE -
+Now here is the catch, as there is an unlimited supply of coins, we want to again form a solution with the same coin value. So we will not recursively call for 
+f(ind-1, T-arr[ind]) rather we will stay at that index only and call for f(ind, T-arr[ind]) to find the answer.
+Note: We will consider the current coin only when its denomination value (arr[ind]) is less than or equal to the target T.
+
+class Solution {
+public:
+    int f(vector<int> &coins, int ind, int amount, vector<vector<int>> &dp) {
+        if(ind == 0) {
+            if(amount % coins[0] == 0) return amount/coins[0]; 
+            else return 1e9;
+        }
+        if(dp[ind][amount] != -1) return dp[ind][amount];
+
+        int notpick = 0 + f(coins, ind-1, amount, dp);
+        int pick = INT_MAX;
+        if(coins[ind] <= amount) pick = 1 + f(coins, ind, amount-coins[ind], dp);
+        return dp[ind][amount] = min(notpick, pick);
+    }
+    int coinChange(vector<int>& coins, int amount) {
+        int n = coins.size();
+        vector<vector<int>> dp(n, vector<int>(amount+1, -1));
+        int ans = f(coins, n-1, amount, dp);
+        if(ans >= 1e9) return -1;
+        else return ans;
+    }
+};
+
+TC - O(n*amount)
+sc - recursion stack space O(n)
