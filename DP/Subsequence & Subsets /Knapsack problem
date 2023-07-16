@@ -1,0 +1,22 @@
+#include <bits/stdc++.h> 
+int f(vector<int> &weight, vector<int> &value, int ind, int W, vector<vector<int>> &dp) {
+	if(ind == 0) {
+		if(weight[0] <= W) return value[0];
+		else return 0;
+	}
+	
+	if(dp[ind][W] != -1) return dp[ind][W];
+	
+	int notpick = 0 + f(weight, value, ind-1, W, dp);
+	int pick = INT_MIN;
+	if(weight[ind] <= W) pick = value[ind] + f(weight, value, ind-1, W-weight[ind], dp);
+
+	return dp[ind][W] = max(notpick, pick);
+}
+int knapsack(vector<int> weight, vector<int> value, int n, int maxWeight) {
+	vector<vector<int>> dp(n, vector<int>(maxWeight+1, -1));
+	return f(weight, value, n-1, maxWeight, dp);
+}
+
+TC - O(n*w) 
+SC - O(n) recursion stack space
