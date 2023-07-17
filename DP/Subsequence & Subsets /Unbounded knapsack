@@ -1,0 +1,23 @@
+#include <bits/stdc++.h> 
+int f(int ind, int W, vector<int>&profit, vector<int>&weight, vector<vector<int>> &dp)      
+{
+    if(ind == 0) {
+        return (int(W/weight[0]))*profit[0];
+    }
+    if(dp[ind][W] != -1) return dp[ind][W];
+    
+    int notpick = 0 + f(ind-1, W, profit, weight, dp);
+    int pick = INT_MIN;
+    if(weight[ind] <= W) pick = profit[ind] + f(ind, W-weight[ind], profit, weight, dp);
+    
+    return dp[ind][W] = max(notpick, pick);
+}
+int unboundedKnapsack(int n, int w, vector<int> &profit, vector<int> &weight) {
+    vector<vector<int>> dp(n, vector<int>(w+1, -1));
+    return f(n-1, w, profit, weight, dp);
+}
+
+same just we can pick an item any number of times we want.
+                   - As there is only one item left, we will pick for W/wt[0] times because we ultimately want to maximize the value of items while respecting the 
+                      constraint of weight of the knapsack. The value added will be the product of the number of items picked and value of the individual item. 
+                      Therefore we return (W/wt[0]) * val[0].
