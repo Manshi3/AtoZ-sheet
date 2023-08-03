@@ -1,0 +1,19 @@
+124. Binary Tree Maximum Path Sum
+
+class Solution {
+public:
+    int maxpathhelp(TreeNode* root, int &maxpath) {
+        if(root == NULL) return 0;
+
+        int lh = max(0, maxpathhelp(root->left, maxpath));
+        int rh = max(0, maxpathhelp(root->right, maxpath));
+
+        maxpath = max(maxpath, lh + rh + root->val);
+        return root->val + max(lh, rh);
+    }
+    int maxPathSum(TreeNode* root) {
+        int maxpath = INT_MIN;
+        maxpathhelp(root, maxpath);
+        return maxpath;
+    }
+};
