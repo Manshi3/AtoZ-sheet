@@ -1,0 +1,27 @@
+103. Binary Tree Zigzag Level Order Traversal
+
+class Solution {
+public:
+    void levelorder(TreeNode* root, vector<vector<int>> &ans, int level) {
+        if(root == NULL) return;
+        if(level >= ans.size()) ans.resize(level + 1);
+        ans[level].push_back(root->val);
+        levelorder(root->left, ans, level + 1);
+        levelorder(root->right, ans, level + 1);
+    }
+    int getheight(TreeNode* root) {
+        if(root == NULL) return 0;
+        int lh = getheight(root->left);
+        int rh = getheight(root->right);
+        return 1 + max(lh, rh);
+    }
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        vector<vector<int>> ans;
+        int height = getheight(root);
+        int level = height;
+        levelorder(root, ans, 0);
+        for(int i = 1; i < ans.size(); i += 2) 
+            reverse(ans[i].begin(), ans[i].end());
+        return ans;
+    }
+};
