@@ -1,0 +1,22 @@
+222. Count Complete Tree Nodes
+
+class Solution {
+public:
+    int findleftheight(TreeNode* root) {
+        int height = 0;
+        while(root != NULL) height++, root = root->left;
+        return height;
+    }
+    int findrightheight(TreeNode* root) {
+        int height = 0;
+        while(root != NULL) height++, root = root->right;
+        return height;
+    }
+    int countNodes(TreeNode* root) {
+        if(root == NULL) return 0;
+        int lh = findleftheight(root);
+        int rh = findrightheight(root);
+        if(lh == rh) return ((1<<lh)-1);
+        else return 1 + countNodes(root->left) + countNodes(root->right);
+    }
+};
