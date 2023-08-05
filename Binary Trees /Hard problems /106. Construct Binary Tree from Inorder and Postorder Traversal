@@ -1,0 +1,27 @@
+class Solution {
+public:
+    TreeNode* constructTree(vector<int> &postorder, int poststart, int postend, vector<int> &inorder, int instart, int inend, map<int, int> &mp) {
+        if(instart > inend || poststart > postend) return NULL;
+
+        TreeNode* root = new TreeNode(postorder[postend]);
+
+        int inroot = mp[root->val];
+        int numleft = inroot - instart;
+
+        root->left = constructTree(postorder, poststart, poststart + numleft - 1, inorder, instart, inroot - 1, mp);
+        root->right = constructTree(postorder, poststart + numleft, postend - 1, inorder, inroot + 1, inend, mp);
+        return root;
+    }
+    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+        if(inorder.size() != postorder.size()) return NULL;
+        int poststart = 0, postend = postorder.size() - 1;
+        int instart = 0, inend = inorder.size() - 1;
+
+        map<int, int> mp;
+
+        for(int i = instart; i <= inend; i++) {
+            mp[inorder[i]] = i;
+        }
+        return constructTree(postorder, poststart, postend, inorder, instart, inend, mp);
+    }
+};
